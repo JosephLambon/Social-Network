@@ -25,7 +25,8 @@ def index(request):
             'title': post.title,
             'body': post.body,
             'author': post.author.natural_key(), # Using natural key to retrieve username
-            'timestamp': post.timestamp()            
+            'timestamp': post.timestamp(),
+            'likes': post.likes
         }
         for post in posts
     ]
@@ -35,6 +36,9 @@ def index(request):
 
     # Serialize list of dictionary's defined above for each post into JSON string.
     serialized_posts = json.dumps(sorted_s_posts)
+
+    for post in serialized_posts:
+        print(post)
 
     return render(request, "network/index.html", {
         "form": NewPostForm(),

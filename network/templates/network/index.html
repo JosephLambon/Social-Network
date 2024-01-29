@@ -28,8 +28,6 @@
     
     <script type="text/babel">
         function Post(props) {
-            console.log('Post Object:', props);
-
             return (
                 <div>
                     <div class="row">
@@ -40,9 +38,14 @@
                         <div class="col-3 p-1"><strong>{props.author}:</strong></div>
                         <div class="col-9 p-1">{props.timestamp}</div>
                     </div>
+                    <div class="row">
+                        <div class="col-3 p-1"><strong>{props.likes}:</strong></div>
+                        <div class="col-9 p-1"><button>Like</button></div>
+                    </div>
                 </div>
             );
         }
+
 
         function App() {
             const posts = JSON.parse('{{ posts|safe }}');
@@ -54,6 +57,7 @@
                             body={post.body}
                             author={post.author}
                             timestamp={post.timestamp}
+                            likes={post.likes}
                         />
                     </div>
                 );
