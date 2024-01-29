@@ -84,33 +84,4 @@ def register(request):
                 "message": "Passwords must match."
             })
 
-        # Attempt to create new user
-        try:
-            user = User.objects.create_user(username, email, password)
-            user.save()
-        except IntegrityError:
-            return render(request, "network/register.html", {
-                "message": "Username already taken."
-            })
-        login(request, user)
-        return HttpResponseRedirect(reverse("index"))
-    else:
-        return render(request, "network/register.html")
-
-
-@login_required
-def new_post(request, user_id):
-    user = User.objects.get(id=user_id)
-    if request.method=="POST":
-        form = NewPostForm(request.POST)
-        if form.is_valid():
-            title = form.cleaned_data["title"]
-            body = form.cleaned_data["body"]
-        
-        # Create new post
-        post = Post(title=title,
-                    body=body,
-                    author=user)
-        post.save()
-    # Render all posts
-    return HttpResponseRedirect(reverse("index"))
+ 
