@@ -50,4 +50,21 @@
           {% endblock %}
         {% comment %} <div id="app"></div>
 
-        <script type="text/ba
+        <script type="text/babel">
+            function Hello() {
+                return (
+                    <h1>Hello!</h1>
+                );
+            }
+            function App() {
+                return (
+                    <div>
+                        <Hello />
+                    </div>
+                );
+            }
+
+            ReactDOM.render(<App />, document.querySelector('#app'));
+        </script> {% endcomment %}
+    </body>
+</html>
