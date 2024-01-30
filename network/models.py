@@ -27,4 +27,11 @@ class User(AbstractUser):
 class Post(models.Model):
     title = models.CharField(max_length=64)
     body = models.CharField(max_length=255)
-    author = models.ForeignKey(User, on_delete=models.CASCADE,
+    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
+    created = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
+    likes = models.IntegerField(default=0, validators=[validate_positive])
+
+    # Format DateTime object as desired
+    def timestamp(self):
+        return self.created.strftime('%d/%m/%y %I:%M %p')
+        
