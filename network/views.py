@@ -114,3 +114,8 @@ def new_post(request, user_id):
         post.save()
     # Render all posts
     return HttpResponseRedirect(reverse("index"))
+
+def profile(request, user_id):
+    profile = User.objects.get(id=user_id)
+
+    if request.method=="POST":

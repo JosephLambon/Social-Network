@@ -13,10 +13,16 @@ class UserManager(models.Manager):
     def get_by_natural_key(self, username):
         return self.get(username=username)
 
-class User(AbstractUser):
+class User(AbstractUser): 
+    # 'related_name' defines the reverse relationship.
+    # e.g if x is following y, y's follower will be x
+    # 'symmetrical=False' is saying that a following b
+    # doesn't automatically mean b is following a
+    followers = models.ManyToManyField('self', symmetrical=False, related_name="following") 
+    following = models.ManyToManyField('self', symmetrical=False, related_name="followers")
+
     def natural_key(self):
         return (self.username)
-    pass
 
 class Post(models.Model):
     title = models.CharField(max_length=64)
