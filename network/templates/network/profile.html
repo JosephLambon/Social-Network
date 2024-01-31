@@ -10,4 +10,33 @@
         </div>
         <div class="row">
             <div class="col-6">{{profile.followers}}</div>
- 
+            <div class="col-6">{{profile.following}}</div>
+        </div>
+    </div>
+
+    <div id="app"></div>
+
+    <script type="text/babel">
+        function App() {
+            const posts = JSON.parse('{{ posts|safe|escapejs }}');
+            const postComponents = posts.map((post, index) => {
+                return (
+                    <div class="post" key={index}>
+                        <Post
+                            title={post.title}
+                            body={post.body}
+                            author={post.author}
+                            timestamp={post.timestamp}
+                            likes={post.likes}
+                        />
+                    </div>
+                );
+            });
+        
+            return postComponents; 
+        }
+
+        ReactDOM.render(<App />, document.querySelector('#app'));
+    </script>   
+
+{% endblock %}
