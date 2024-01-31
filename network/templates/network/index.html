@@ -1,0 +1,71 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+    <div class="post">
+        <h3>New Post</h3>
+        <form action="{% url 'new_post' user.id %}" method="post">
+        {% csrf_token %}
+            {% for field in form %}
+                {% if field.name == "body" %}
+                <div class="row">
+                    <div class="col-3 p-1"><strong>{{field.name|title}}:</strong></div>
+                    <div class="col-9 p-1">{{field}}</div>
+                </div>
+                {% else %}
+                <div class="row">
+                    <div class="col-3 p-1"><strong>{{field.name|title}}</strong></div>
+                    <div class="col-9 p-1">{{field}}</div>
+                </div>
+                {% endif %}
+            {% endfor %}
+            <input type=submit>
+        </form>
+    </div>
+    {% endif %}
+
+    <div id="app"></div>
+    
+    <script type="text/babel">
+        function Post(props) {
+            return (
+                <div>
+                    <div class="row">
+                        <div class="col-3 p-1"><strong>{props.title}:</strong></div>
+                        <div class="col-9 p-1">{props.body}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3 p-1"><strong>{props.author}:</strong></div>
+                        <div class="col-9 p-1">{props.timestamp}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3 p-1"><strong>{props.likes}:</strong></div>
+                        <div class="col-9 p-1"><button>Like</button></div>
+                    </div>
+                </div>
+            );
+        }
+
+
+        function App() {
+            const posts = JSON.parse('{{ posts|safe }}');
+            const postComponents = posts.map((post, index) => {
+                return (
+                    <div class="post" key={index}>
+                        <Post
+                            title={post.title}
+                            body={post.body}
+                            author={post.author}
+                            timestamp={post.timestamp}
+                            likes={post.likes}
+                        />
+                    </div>
+                );
+            });
+        
+            return postComponents; 
+        }
+
+        ReactDOM.render(<App />, document.querySelector('#app'));
+    </script>   
+{% endblock %}
