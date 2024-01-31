@@ -12,13 +12,10 @@ from .forms import NewPostForm
 from django.core.serializers import serialize
 import json
 
-
-def index(request):
-    posts = Post.objects.all()
+def serialise_posts(posts):
     # Serialisation allows us to transfer and store the
     # posts data in a way that remains accessible in JSX
     # AKA translates our Django 'Post' model data.
-
     # See defined natural key in models.py . By default, returns User ID, which is unhelpful.
     s_posts = [
         {
@@ -30,15 +27,16 @@ def index(request):
         }
         for post in posts
     ]
-
     # Sort s_posts list by datetime objects.
     sorted_s_posts = sorted(s_posts, key=lambda x: x['timestamp'], reverse=True)
 
     # Serialize list of dictionary's defined above for each post into JSON string.
     serialized_posts = json.dumps(sorted_s_posts)
+    return serialized_posts
 
-    for post in serialized_posts:
-        print(post)
+def index(request):
+    posts = Post.objects.all()
+    serialized_posts = serialise_posts(posts)
 
     return render(request, "network/index.html", {
         "form": NewPostForm(),
@@ -117,7 +115,11 @@ def new_post(request, user_id):
 
 def profile(request, user_id):
     profile = User.objects.get(id=user_id)
+    posts = Post.objects.filter(author=profile.id)
+
+    serialised_posts = serialise_posts(posts)
 
     return render(request, "network/profile.html", {
-        "profile": profile
+        "profile": profile,
+        "posts": serialised_posts
     })

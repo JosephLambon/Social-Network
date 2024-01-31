@@ -11,6 +11,8 @@
         <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
         <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
         <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+        {% comment %} Include React Components from static {% endcomment %}
+        <script type="text/babel" src="{% static 'network/ReactComponents.js' %}"></script>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -47,6 +49,26 @@
 
 
           {% block body %}
+          <script type="text/babel">
+            function Post(props) {
+                return (
+                    <div>
+                        <div class="row">
+                            <div class="col-3 p-1"><strong>{props.title}:</strong></div>
+                            <div class="col-9 p-1">{props.body}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 p-1"><strong>{props.author}:</strong></div>
+                            <div class="col-9 p-1">{props.timestamp}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 p-1"><strong>{props.likes}:</strong></div>
+                            <div class="col-9 p-1"><button>Like</button></div>
+                        </div>
+                    </div>
+                );
+            }
+            </script>
           {% endblock %}
     </body>
 </html>
