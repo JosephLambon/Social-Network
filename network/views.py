@@ -118,4 +118,6 @@ def new_post(request, user_id):
 def profile(request, user_id):
     profile = User.objects.get(id=user_id)
 
-   
+    return render(request, "network/profile.html", {
+        "profile": profile
+    })
