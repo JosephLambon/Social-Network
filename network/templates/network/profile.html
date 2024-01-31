@@ -2,7 +2,9 @@
 
 {% block body %}
     <div class="profile_stats">
-        <div class="row">
+        <h3 style="marg">@{{profile.username}}</h3>
+        <hr color="black" size="10">
+        <div class="row marg-top">
             <div class="col-6">Followers:</div>
             <div class="col-6">Following:</div>
         </div>
@@ -11,4 +13,30 @@
             <div class="col-6">{{profile.following}}</div>
         </div>
     </div>
+
+    <div id="app"></div>
+
+    <script type="text/babel">
+        function App() {
+            const posts = JSON.parse('{{ posts|safe|escapejs }}');
+            const postComponents = posts.map((post, index) => {
+                return (
+                    <div class="post" key={index}>
+                        <Post
+                            title={post.title}
+                            body={post.body}
+                            author={post.author}
+                            timestamp={post.timestamp}
+                            likes={post.likes}
+                        />
+                    </div>
+                );
+            });
+        
+            return postComponents; 
+        }
+
+        ReactDOM.render(<App />, document.querySelector('#app'));
+    </script>   
+
 {% endblock %}
