@@ -115,11 +115,4 @@ def new_post(request, user_id):
 
 def profile(request, user_id):
     profile = User.objects.get(id=user_id)
-    posts = Post.objects.filter(author=profile.id)
-
-    serialised_posts = serialise_posts(posts)
-
-    return render(request, "network/profile.html", {
-        "profile": profile,
-        "posts": serialised_posts
-    })
+    posts = Post.objects.filter(author=pro
