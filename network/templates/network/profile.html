@@ -1,5 +1,14 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-
+    <div class="profile_stats">
+        <div class="row">
+            <div class="col-6">Followers:</div>
+            <div class="col-6">Following:</div>
+        </div>
+        <div class="row">
+            <div class="col-6">{profile.followers}</div>
+            <div class="col-6">{profile.following}</div>
+        </div>
+    </div>
 {% endblock %}
