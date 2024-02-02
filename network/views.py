@@ -10,6 +10,7 @@ from .models import User, Post
 from .forms import NewPostForm
 
 from django.core.serializers import serialize
+from django.core.serializers.json import DjangoJSONEncoder
 import json
 
 def serialise_posts(posts):
@@ -23,15 +24,17 @@ def serialise_posts(posts):
             'body': post.body,
             'author': post.author.natural_key(), # Using natural key to retrieve username
             'timestamp': post.timestamp(),
+            'created': post.created,
             'likes': post.likes
         }
         for post in posts
     ]
     # Sort s_posts list by datetime objects.
-    sorted_s_posts = sorted(s_posts, key=lambda x: x['timestamp'], reverse=True)
+    sorted_s_posts = sorted(s_posts, key=lambda x: x['created'], reverse=True)  
 
     # Serialize list of dictionary's defined above for each post into JSON string.
-    serialized_posts = json.dumps(sorted_s_posts)
+    # DjangoJSONEncoder allows serialisation of datetime objects.
+    serialized_posts = json.dumps(sorted_s_posts, cls=DjangoJSONEncoder)
     return serialized_posts
 
 def index(request):

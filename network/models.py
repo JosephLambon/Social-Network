@@ -33,5 +33,6 @@ class Post(models.Model):
 
     # Format DateTime object as desired
     def timestamp(self):
-        return self.created.strftime('%d/%m/%y %I:%M %p')
+        return self.created.strftime("%b %d, %Y %I:%M%p")
+
         

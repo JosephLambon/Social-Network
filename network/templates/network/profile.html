@@ -12,6 +12,12 @@
             <div class="col-6">{{profile.followers}}</div>
             <div class="col-6">{{profile.following}}</div>
         </div>
+        {% if user.is_authenticated and user.username != profile.username %}
+            <div class="row pt-2 justify-content-center">
+                <div class="col-3" href="#"><button class="btn-rounded">Follow</button></div>
+                <div class="col-3" href="#"><button class="btn-rounded">Share</button></div>
+            </div>
+        {% endif %}
     </div>
 
     <div id="app"></div>

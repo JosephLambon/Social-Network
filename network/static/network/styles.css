@@ -4,9 +4,10 @@
     border-color: #bbbbbb;
     border-radius: 5px;
     padding: 3%;
-    margin:5%;
     margin-top: 2%;
     margin-bottom: 2%;
+    margin-right: 25vw;
+    margin-left: 25vw;
 }
 
 .profile_stats {
@@ -20,3 +21,24 @@
     margin: 10px;
 }
 
+.btn-rounded {
+    border-width: 1px;
+    border-color: rgb(70, 70, 70);
+    border-radius: 5px;
+    background-color: rgb(0, 187, 22);
+    color: white;
+    font-size: 11pt;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 5px;
+    padding-left: 5px;
+    margin: 10px;
+}
+
+.red-heart {
+    color: red;
+    background-color: white;
+    border-color: white;
+    border-style: none;
+    font-size: 14pt;
+}
