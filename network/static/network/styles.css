@@ -2,7 +2,7 @@
     border-style: solid;
     border-width: 2px;
     border-color: #bbbbbb;
-    border-radius: 5px;
+    border-radius: 30px;
     padding: 3%;
     margin-top: 2%;
     margin-bottom: 2%;
@@ -41,4 +41,10 @@
     border-color: white;
     border-style: none;
     font-size: 14pt;
+
+}
+
+.timestamp {
+    font-size: 10pt;
+    color: grey;
 }

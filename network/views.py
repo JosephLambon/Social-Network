@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
@@ -126,3 +126,27 @@ def profile(request, user_id):
         "profile": profile,
         "posts": serialised_posts
     })
+
+def follow(request, user_id, profile_id):
+    profile = User.objects.get(id=profile_id)
+    user = User.objects.get(id=user_id)
+
+    check = False
+    # Check if already following
+    for person in user.following.all():
+        if person.username == profile.username:
+            check = True
+    
+    if check == True:
+        # UPDATE TO JUST RETURN PROFILE WITH SIMPLE ERROR MESSAGE VIA DJANGO VARIABLE.
+        return HttpResponseBadRequest("Error: Already following this user.")
+    else:
+        # Have user follow profile
+        user.following.add(profile)
+        # Add user to profile's followers
+        profile.followers.add(user)
+        user.save()
+        profile.save()
+        return redirect(reverse('profile', args=[profile.id]))
+
+
