@@ -37,6 +37,14 @@ def serialise_posts(posts):
     serialized_posts = json.dumps(sorted_s_posts, cls=DjangoJSONEncoder)
     return serialized_posts
 
+def check_if_following(user, profile):
+    check = False
+    # Check if already following
+    for person in user.following.all():
+        if person.username == profile.username:
+            check = True
+    return check
+
 def index(request):
     posts = Post.objects.all()
     serialized_posts = serialise_posts(posts)
@@ -116,30 +124,35 @@ def new_post(request, user_id):
     # Render all posts
     return HttpResponseRedirect(reverse("index"))
 
-def profile(request, user_id):
-    profile = User.objects.get(id=user_id)
+@login_required
+def profile(request, profile_id):
+    profile = User.objects.get(id=profile_id)
+    user = User.objects.get(id=request.user.id)
     posts = Post.objects.filter(author=profile.id)
+
+    check = check_if_following(user, profile)
 
     serialised_posts = serialise_posts(posts)
 
     return render(request, "network/profile.html", {
         "profile": profile,
-        "posts": serialised_posts
+        "posts": serialised_posts,
+        "check": check
     })
 
 def follow(request, user_id, profile_id):
     profile = User.objects.get(id=profile_id)
-    user = User.objects.get(id=user_id)
+    user = User.objects.get(id=request.user.id)
 
-    check = False
-    # Check if already following
-    for person in user.following.all():
-        if person.username == profile.username:
-            check = True
+    posts = Post.objects.filter(author=profile.id)
+    serialised_posts = serialise_posts(posts)
+    check = check_if_following(user, profile)
     
     if check == True:
         # UPDATE TO JUST RETURN PROFILE WITH SIMPLE ERROR MESSAGE VIA DJANGO VARIABLE.
-        return HttpResponseBadRequest("Error: Already following this user.")
+        # Redirect with a query parameter for error message
+        return redirect(reverse('profile', args=[profile.id]) + f'?error=Already following this user')
+
     else:
         # Have user follow profile
         user.following.add(profile)
@@ -147,6 +160,25 @@ def follow(request, user_id, profile_id):
         profile.followers.add(user)
         user.save()
         profile.save()
-        return redirect(reverse('profile', args=[profile.id]))
+        return redirect('profile', profile_id=profile.id)
 
+def unfollow(request, user_id, profile_id):
+    profile = User.objects.get(id=profile_id)
+    user = User.objects.get(id=user_id)
 
+    posts = Post.objects.filter(author=profile.id)
+    serialised_posts = serialise_posts(posts)
+
+    check = check_if_following(user, profile)
+    
+    if check == True:
+        # Have user unfollow profile
+        user.following.remove(profile)
+        # Remove user from profile's followers
+        profile.followers.remove(user)
+        user.save()
+        profile.save()
+        return redirect('profile', profile_id=profile.id)
+    else:
+        # UPDATE TO JUST RETURN PROFILE WITH SIMPLE ERROR MESSAGE VIA DJANGO VARIABLE.
+        return redirect(reverse('profile', args=[profile.id]) + f'?error=Not following this user')

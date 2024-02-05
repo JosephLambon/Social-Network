@@ -2,8 +2,8 @@
 
 {% block body %}
     {% if user.is_authenticated %}
-    <div class="post">
-        <h3>New Post</h3>
+    <div class="post text-center">
+        <h3 class="p-4">Make a post...</h3>
         <form action="{% url 'new_post' user.id %}" method="post">
         {% csrf_token %}
             {% for field in form %}
@@ -19,7 +19,9 @@
                 </div>
                 {% endif %}
             {% endfor %}
-            <input type=submit>
+            <div class="text-right">
+                <input class="btn-rounded" type=submit value="Post">
+            </div>
         </form>
     </div>
     {% endif %}

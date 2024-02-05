@@ -13,15 +13,25 @@
             <div class="col-6">{{profile.following.count}}</div>
         </div>
         {% if user.is_authenticated and user.username != profile.username %}
-        
-            <div class="row pt-2 justify-content-center">
-                <form action="{% url 'follow' user.id profile.id %}">
-                    <div class="col-3" href="{% url 'follow' user.id profile.id %}">
-                        <input type="submit" value="Follow" class="btn-rounded"></input>
-                    </div>
-                </form>
-                <div class="col-3" href="#"><button class="btn-rounded">Share</button></div>
-            </div>
+            {% if check %}
+                <div class="row pt-2 justify-content-center">
+                    <form action="{% url 'unfollow' user.id profile.id %}">
+                        <div class="col-3">
+                            <input type="submit" value="Unfollow" class="btn-rounded"></input>
+                        </div>
+                    </form>
+                    <div class="col-3"><button class="btn-rounded">Share</button></div>
+                </div>
+            {% else %}
+                <div class="row pt-2 justify-content-center">
+                    <form action="{% url 'follow' user.id profile.id %}">
+                        <div class="col-3">
+                            <input type="submit" value="Follow" class="btn-rounded"></input>
+                        </div>
+                    </form>
+                    <div class="col-3" href="#"><button class="btn-rounded">Share</button></div>
+                </div>
+            {% endif %}
         {% endif %}
     </div>
 
