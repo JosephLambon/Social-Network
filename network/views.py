@@ -140,6 +140,21 @@ def profile(request, profile_id):
         "check": check
     })
 
+@login_required
+def following(request):
+    user = User.objects.get(id=request.user.id)
+    following = user.following.all()
+    # Use '__in' to filter the list
+    posts = Post.objects.filter(author__in=following)
+
+    serialised_posts = serialise_posts(posts)
+
+    return render(request, "network/following.html", {
+        "posts": serialised_posts
+    })
+
+
+
 def follow(request, user_id, profile_id):
     profile = User.objects.get(id=profile_id)
     user = User.objects.get(id=request.user.id)
@@ -147,6 +162,8 @@ def follow(request, user_id, profile_id):
     posts = Post.objects.filter(author=profile.id)
     serialised_posts = serialise_posts(posts)
     check = check_if_following(user, profile)
+
+    error_message = request.GET.get('message', None)
     
     if check == True:
         # UPDATE TO JUST RETURN PROFILE WITH SIMPLE ERROR MESSAGE VIA DJANGO VARIABLE.
@@ -180,5 +197,5 @@ def unfollow(request, user_id, profile_id):
         profile.save()
         return redirect('profile', profile_id=profile.id)
     else:
-        # UPDATE TO JUST RETURN PROFILE WITH SIMPLE ERROR MESSAGE VIA DJANGO VARIABLE.
-        return redirect(reverse('profile', args=[profile.id]) + f'?error=Not following this user')
+        # Pass message to profile page to add error message to display
+        return redirect(reverse('profile', args=[profile.id]) + f'?message=Error: Not following this user')

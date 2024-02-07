@@ -1,0 +1,32 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <div>
+        <h3 class="heading">Following:</h3>
+        <hr size="10"></hr>
+    </div>
+    <div id="app"></div>
+
+    <script type="text/babel">
+        function App() {
+            const posts = JSON.parse('{{ posts|safe|escapejs }}');
+            const postComponents = posts.map((post, index) => {
+                return (
+                    <div class="post" key={index}>
+                        <Post
+                            title={post.title}
+                            body={post.body}
+                            author={post.author}
+                            timestamp={post.timestamp}
+                            likes={post.likes}
+                        />
+                    </div>
+                );
+            });
+        
+            return postComponents; 
+        }
+
+        ReactDOM.render(<App />, document.querySelector('#app'));
+    </script>   
+{% endblock %}
