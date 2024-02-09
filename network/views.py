@@ -11,6 +11,7 @@ from .forms import NewPostForm
 
 from django.core.serializers import serialize
 from django.core.serializers.json import DjangoJSONEncoder
+from django.core.paginator import Paginator
 import json
 
 def serialise_posts(posts):
@@ -46,12 +47,18 @@ def check_if_following(user, profile):
     return check
 
 def index(request):
-    posts = Post.objects.all()
-    serialized_posts = serialise_posts(posts)
+    posts = Post.objects.order_by('-created')
+
+    p = Paginator(posts, 10)
+    page_no = request.GET.get('page')
+    page_obj = p.get_page(page_no)
+    # Serialise posts on the page selected
+    serialized_posts = serialise_posts(page_obj.object_list)
 
     return render(request, "network/index.html", {
         "form": NewPostForm(),
-        "posts": serialized_posts
+        "posts": serialized_posts,
+        "page_obj": page_obj
         })
 
 

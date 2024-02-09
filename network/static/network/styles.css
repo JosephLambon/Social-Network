@@ -59,3 +59,9 @@
     font-size: 10pt;
     color: grey;
 }
+
+.pagination {
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
