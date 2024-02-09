@@ -61,7 +61,6 @@ def index(request):
         "page_obj": page_obj
         })
 
-
 def login_view(request):
     if request.method == "POST":
 
@@ -81,11 +80,9 @@ def login_view(request):
     else:
         return render(request, "network/login.html")
 
-
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
-
 
 def register(request):
     if request.method == "POST":
@@ -113,7 +110,6 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
-
 @login_required
 def new_post(request, user_id):
     user = User.objects.get(id=user_id)
@@ -136,15 +132,21 @@ def profile(request, profile_id):
     profile = User.objects.get(id=profile_id)
     user = User.objects.get(id=request.user.id)
     posts = Post.objects.filter(author=profile.id)
+    posts = posts.order_by('-created')
+
+    p = Paginator(posts, 10)
+    page_no = request.GET.get('page')
+    page_obj = p.get_page(page_no)
+    # Serialise posts on the page selected
+    serialized_posts = serialise_posts(page_obj.object_list)
 
     check = check_if_following(user, profile)
 
-    serialised_posts = serialise_posts(posts)
-
     return render(request, "network/profile.html", {
         "profile": profile,
-        "posts": serialised_posts,
-        "check": check
+        "posts": serialized_posts,
+        "check": check,
+        "page_obj": page_obj
     })
 
 @login_required
@@ -153,14 +155,18 @@ def following(request):
     following = user.following.all()
     # Use '__in' to filter the list
     posts = Post.objects.filter(author__in=following)
+    posts = posts.order_by('-created')
 
-    serialised_posts = serialise_posts(posts)
+    p = Paginator(posts, 10)
+    page_no = request.GET.get('page')
+    page_obj = p.get_page(page_no)
+    # Serialise posts on the page selected
+    serialized_posts = serialise_posts(page_obj.object_list)
 
     return render(request, "network/following.html", {
-        "posts": serialised_posts
+        "posts": serialized_posts,
+        "page_obj": page_obj
     })
-
-
 
 def follow(request, user_id, profile_id):
     profile = User.objects.get(id=profile_id)
