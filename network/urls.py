@@ -3,6 +3,8 @@ from django.urls import path
 
 from . import views
 
+from .views import update_post
+
 urlpatterns = [
     path("", views.index, name="index"),
     path("login", views.login_view, name="login"),
@@ -12,5 +14,6 @@ urlpatterns = [
     path("new_post/<int:user_id>/", views.new_post, name="new_post"),
     path("follow/<int:user_id>/<int:profile_id>", views.follow, name="follow"),
     path("unfollow/<int:user_id>/<int:profile_id>", views.unfollow, name="unfollow"),
-    path("following", views.following, name="following")
+    path("following", views.following, name="following"),
+    path("update-post/", update_post, name="update_post")
 ]

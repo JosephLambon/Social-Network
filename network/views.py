@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadReque
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 from .models import User, Post
 
@@ -213,3 +214,18 @@ def unfollow(request, user_id, profile_id):
     else:
         # Pass message to profile page to add error message to display
         return redirect(reverse('profile', args=[profile.id]) + f'?message=Error: Not following this user')
+    
+def update_post(request):
+    if request.method == 'POST':
+        # Parse JSON list to Python dictionary
+        data = json.loads(request.body)
+        post_id = data['id']
+        new_title = data['newTitle']
+        new_body = data['newBody']
+        post = Post.objects.get(pk=post_id)
+        post.title = new_title
+        post.body = new_body
+        post.save()
+        return JsonResponse({'message': 'Post updated successfully'}, status=200)
+    else:
+        return JsonResponse({'error': 'Only POST requests are allowed'}, status=400)
