@@ -27,7 +27,7 @@ def serialise_posts(posts):
             'author': post.author.natural_key(), # Using natural key to retrieve username
             'timestamp': post.timestamp(),
             'created': post.created,
-            'likes': post.likes,
+            'likes': post.likes_count,
             'id': post.id
         }
         for post in posts
@@ -227,5 +227,21 @@ def update_post(request):
         post.body = new_body
         post.save()
         return JsonResponse({'message': 'Post updated successfully'}, status=200)
+    else:
+        return JsonResponse({'error': 'Only POST requests are allowed'}, status=400)
+    
+# Define view to like post
+def like_post(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        post_id = data['id']
+        user_id = User.objects.get(username=data['liker_username']).id
+        user = User.objects.get(pk=user_id)
+        post = Post.objects.get(pk=post_id)
+        post.likes.add(user)
+        post.save()
+
+        likes_count = post.likes.count()
+        return JsonResponse({'likes_count': likes_count}, status=200)
     else:
         return JsonResponse({'error': 'Only POST requests are allowed'}, status=400)

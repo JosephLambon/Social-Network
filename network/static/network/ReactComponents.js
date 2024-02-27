@@ -64,6 +64,7 @@ const Post = (props) => {
             // if (props.author != )
             // Update post details on save.
             document.getElementById(`save_btn_${props.id}`).addEventListener('click', Save);
+            document.getElementById(`like_btn_${props.id}`).addEventListener('click', Like);
         };
     };
 
@@ -115,7 +116,42 @@ const Post = (props) => {
             const btn_div = item.children[2];
             btn_div.children[0].style.display = 'none';
 
+            document.getElementById(`save_btn_${props.id}`).addEventListener('click', Save);
         };
+    };
+
+    const Like = () => {
+        const item = document.getElementById(props.id);
+        
+        fetch('/like-post/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                id: props.id,
+                liker_username: UserUsername
+            }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to like post');
+            }
+            // This line parses the JSON response
+            // Hence, passes through the returned likes_count from the like view.
+            return response.json();
+        })
+        .then(data => {
+            const likes_div = item.children[3];
+            const like_counter = likes_div.children[1];
+
+            like_counter.innerHTML = data.likes_count;
+        })
+        .catch(error => {
+            console.error('Error liking post:', error);
+            // Handle error
+        });
     };
 
     return (
@@ -141,7 +177,9 @@ const Post = (props) => {
             </div>
             <div class="row text-center">
                 <div class="col-6 p-1 timestamp">{props.timestamp}</div>
-                <div class="col-6 p-1"><button class="red-heart">&#9829;</button></div>
+                <div class="col-6 p-1">
+                    <button id="like_btn_${props.id}" class="red-heart" onClick={Like}>&#9829;</button>
+                    </div>
             </div>
         </div>
     );

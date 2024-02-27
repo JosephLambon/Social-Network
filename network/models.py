@@ -29,7 +29,13 @@ class Post(models.Model):
     body = models.CharField(max_length=255)
     author = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     created = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
-    likes = models.IntegerField(default=0, validators=[validate_positive])
+    likes = models.ManyToManyField(User, related_name="liked_posts", blank=True)
+
+    # '@property' allows you to call the defined property without requiring parenthesis to call.
+    # For example, 'Post.likes_count' rather than 'Post.likes_count()'
+    @property
+    def likes_count(self):
+        return self.likes.count()
 
     # Format DateTime object as desired
     def timestamp(self):
