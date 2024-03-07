@@ -18,6 +18,8 @@ function getCookie(name) {
 }
 
 const Post = (props) => { 
+    const [liked, setLiked] = React.useState(props.liked);
+
     const Edit = () => {
         const item = document.getElementById(props.id);
         if (item.children[0].children[1].children[0].style.display == 'none') {
@@ -138,6 +140,7 @@ const Post = (props) => {
             if (!response.ok) {
                 throw new Error('Failed to like post');
             }
+            setLiked(true);
             // This line parses the JSON response
             // Hence, passes through the returned likes_count from the like view.
             return response.json();
@@ -146,12 +149,60 @@ const Post = (props) => {
             const likes_div = item.children[3];
             const like_counter = likes_div.children[1];
 
+            const liker = document.getElementById(`liker_${props.id}`);
+            const unliker = document.getElementById(`unliker_${props.id}`);
+
             like_counter.innerHTML = data.likes_count;
+            liker.style.visibility = 'hidden';
+            unliker.style.visibility = 'visibile';
         })
         .catch(error => {
             console.error('Error liking post:', error);
             // Handle error
         });
+        
+    };
+
+    const Unlike = () => {
+        const item = document.getElementById(props.id);
+        
+        fetch('/unlike-post/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                id: props.id,
+                liker_username: UserUsername
+            }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to unlike post');
+            }
+            setLiked(false);
+            // This line parses the JSON response
+            // Hence, passes through the returned likes_count from the like view.
+            return response.json();
+        })
+        .then(data => {
+            const likes_div = item.children[3];
+            const like_counter = likes_div.children[1];
+
+            const liker = document.getElementById(`liker_${props.id}`);
+            const unliker = document.getElementById(`unliker_${props.id}`);
+
+            like_counter.innerHTML = data.likes_count;
+            unliker.style.visibility = 'hidden';
+            liker.style.visibility = 'visible';
+            
+        })
+        .catch(error => {
+            console.error('Error unliking post:', error);
+            // Handle error
+        });
+        
     };
 
     return (
@@ -177,10 +228,16 @@ const Post = (props) => {
             </div>
             <div class="row text-center">
                 <div class="col-6 p-1 timestamp">{props.timestamp}</div>
-                <div class="col-6 p-1">
-                    <button id="like_btn_${props.id}" class="red-heart" onClick={Like}>&#9829;</button>
+                {liked ? (
+                    <div id={`unliker_${props.id}`} class="col-6 p-1">
+                        <button class="red-heart" onClick={Unlike}>&#9829;</button>
                     </div>
+                ) : (
+                    <div id={`liker_${props.id}`} class="col-6 p-1">
+                        <button class="red-heart" onClick={Like}>&#9825;</button>
+                    </div>
+                )}
             </div>
         </div>
     );
-}
+};

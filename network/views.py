@@ -40,6 +40,37 @@ def serialise_posts(posts):
     serialized_posts = json.dumps(sorted_s_posts, cls=DjangoJSONEncoder)
     return serialized_posts
 
+def serialise_posts_complex(posts, user):
+    s_posts =[]
+
+    for post in posts:
+        liked = False
+        likes = post.likes.all()
+        for person in likes:
+            if person.username == user.username:
+                liked = True
+                break # Finish iterating if user found
+
+        s_posts.append(
+            {
+                'title': post.title,
+                'body': post.body,
+                'author': post.author.natural_key(), # Using natural key to retrieve username
+                'timestamp': post.timestamp(),
+                'created': post.created,
+                'likes': post.likes_count,
+                'id': post.id,
+                'liked': liked
+            })
+    # Sort s_posts list by datetime objects.
+    sorted_s_posts = sorted(s_posts, key=lambda x: x['created'], reverse=True)
+
+    # Serialize list of dictionary's defined above for each post into JSON string.
+    # DjangoJSONEncoder allows serialisation of datetime objects.
+    serialized_posts = json.dumps(sorted_s_posts, cls=DjangoJSONEncoder)
+    return serialized_posts
+
+
 def check_if_following(user, profile):
     check = False
     # Check if already following
@@ -54,8 +85,10 @@ def index(request):
     p = Paginator(posts, 10)
     page_no = request.GET.get('page')
     page_obj = p.get_page(page_no)
+
+
     # Serialise posts on the page selected
-    serialized_posts = serialise_posts(page_obj.object_list)
+    serialized_posts = serialise_posts_complex(page_obj.object_list, request.user)
 
     return render(request, "network/index.html", {
         "form": NewPostForm(),
@@ -140,7 +173,7 @@ def profile(request, profile_id):
     page_no = request.GET.get('page')
     page_obj = p.get_page(page_no)
     # Serialise posts on the page selected
-    serialized_posts = serialise_posts(page_obj.object_list)
+    serialized_posts = serialise_posts_complex(page_obj.object_list, request.user)
 
     check = check_if_following(user, profile)
 
@@ -163,13 +196,13 @@ def following(request):
     page_no = request.GET.get('page')
     page_obj = p.get_page(page_no)
     # Serialise posts on the page selected
-    serialized_posts = serialise_posts(page_obj.object_list)
+    serialized_posts = serialise_posts_complex(page_obj.object_list, request.user)
 
     return render(request, "network/following.html", {
         "posts": serialized_posts,
         "page_obj": page_obj
     })
-
+@login_required
 def follow(request, user_id, profile_id):
     profile = User.objects.get(id=profile_id)
     user = User.objects.get(id=request.user.id)
@@ -193,13 +226,13 @@ def follow(request, user_id, profile_id):
         user.save()
         profile.save()
         return redirect('profile', profile_id=profile.id)
-
+@login_required
 def unfollow(request, user_id, profile_id):
     profile = User.objects.get(id=profile_id)
     user = User.objects.get(id=user_id)
 
     posts = Post.objects.filter(author=profile.id)
-    serialised_posts = serialise_posts(posts)
+    serialised_posts = serialise_posts_complex(posts, request.user)
 
     check = check_if_following(user, profile)
     
@@ -214,7 +247,7 @@ def unfollow(request, user_id, profile_id):
     else:
         # Pass message to profile page to add error message to display
         return redirect(reverse('profile', args=[profile.id]) + f'?message=Error: Not following this user')
-    
+@login_required
 def update_post(request):
     if request.method == 'POST':
         # Parse JSON list to Python dictionary
@@ -229,8 +262,9 @@ def update_post(request):
         return JsonResponse({'message': 'Post updated successfully'}, status=200)
     else:
         return JsonResponse({'error': 'Only POST requests are allowed'}, status=400)
-    
-# Define view to like post
+
+
+@login_required
 def like_post(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -245,3 +279,34 @@ def like_post(request):
         return JsonResponse({'likes_count': likes_count}, status=200)
     else:
         return JsonResponse({'error': 'Only POST requests are allowed'}, status=400)
+    
+@login_required
+def unlike_post(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        post_id = data['id']
+        user_id = User.objects.get(username=data['liker_username']).id
+        user = User.objects.get(pk=user_id)
+        post = Post.objects.get(pk=post_id)
+        post.likes.remove(user)
+        post.save()
+
+        likes_count = post.likes.count()
+        return JsonResponse({'likes_count': likes_count}, status=200)
+    else:
+        return JsonResponse({'error': 'Only POST requests are allowed'}, status=400)
+    
+# def check_post(request):
+#     if request.method == 'POST':
+#         data = json.loads(request.body)
+#         post_id = data['id']
+#         user_id = User.objects.get(username=data['liker_username']).id 
+#         user = User.objects.get(pk=user_id)
+#         post = Post.objects.get(pk=post_id)
+#         liked = False
+#         # Check if user has liked post
+#         liked = post.likes.filter(username=liker_username).exists()
+
+#         return JsonResponse({'liked': liked}, status=200)
+#     else:
+#         return JsonResponse({'error': 'Only POST requests are allowed'}, status=400)
