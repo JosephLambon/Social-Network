@@ -14,10 +14,10 @@ The aim of this project was to design a Twitter-like social network website.
 Using Django for the backend and React for the frontend, I developed a functional web application in which you can make posts, follow other users, like posts and edit your own.
 
 ## <a id='project_resources'> Project Resources </a>
-*[Django](https://www.djangoproject.com/)
+* [Django](https://www.djangoproject.com/)
 > Django is a high-level open source Python framework that makes it easier to build secure web applications.
 
-*[React](https://react.dev/)
+* [React](https://react.dev/)
 > React is a JavaScript framework that enables you to build slick user interfaces out of personalised components.
 
-*[]()
+* []()
