@@ -18,6 +18,28 @@ Using Django for the backend and React for the frontend, I developed a functiona
 > Django is a high-level open source Python framework that makes it easier to build secure web applications.
 
 * [React](https://react.dev/)
-> React is a JavaScript framework that enables you to build slick user interfaces out of personalised components.
+> React is a JavaScript framework that enables you to build slick user interfaces and build custom re-usable components.
 
-* []()
+* [Bootstrap](https://getbootstrap.com/)
+> Bootstrap is a front-end library, offering pre-built components and JavaScript plug-ins.
+
+* [SQLite](https://www.sqlite.org/)
+> SQLite is a C-language library that implements a fast & reliable SQL database engine.
+
+## <a id='setup'> Setup and Usage </a>
+### 1. Install prerequisites
+* Install [Python](https://www.python.org/)
+* Install [virtualenv]
+  > Use 'pip install virtualenv'
+### 2. Setup virtual environment
+* Start virtual environment
+...virtualenv venv/bin/activate
+* Install django
+> * pip install django
+### 3. Change directory
+* Change into the 'project4' folder.
+### 4. Make migrations in Django
+> 1. python manage.py makemigrations
+> 2. python manage.py migrate
+### 5. Run django server
+* python manage.py runserver
