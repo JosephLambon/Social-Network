@@ -27,26 +27,53 @@ Using Django for the backend and React for the frontend, I developed a functiona
 > SQLite is a C-language library that implements a fast & reliable SQL database engine.
 
 ## <a id='setup'> Setup and Usage </a>
-#### [NOTE: Anything in quotations ('...') is for the command line]
+#### [NOTE: Any lines of code included are intended for the command line]
 
 ### 1. Install prerequisites
 a. Install [Python](https://www.python.org/) </br>
 b. Install [virtualenv](https://virtualenv.pypa.io/en/latest/)
-  > 'pip install virtualenv' 
+``` 
+ pip install virtualenv
+```
 ### 2. Setup virtual environment
 * Create virtual environment </br>
-   > 'virtualenv env_name' </br>
+```
+# Run this line on the command line
+# Replace 'env_name' with whatever your desired env's name is.
+
+virtualenv env_name
+```
 * Start virtual environment
-   > 'source env_name/bin/activate' </br>
+```
+# This will activate your virtualenv.
+
+source env_name/bin/activate
+```
 * Install django
-   > 'pip install django'
+```
+# Running this in your command line will install it to you activated virtual environment
+
+pip install django
+```
 ### 3. Change directory
 * Change into the 'project4' folder.
 ### 4. Make migrations in Django
-> 'python manage.py makemigrations' </br>
->'python manage.py migrate'
+```
+# Check for any alterations to your project that need migrating
+
+python manage.py makemigrations
+```
+```
+# Make/push any migrations.
+
+python manage.py migrate
+```
 ### 5. Run django server
-> 'python manage.py runserver'
+```
+# This will host the web application locally
+
+python manage.py runserver
+```
 
 ## <a id='video'> Video Example </a>
 
