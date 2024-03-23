@@ -1,0 +1,89 @@
+.post {
+    border-style: solid;
+    border-width: 2px;
+    border-color: #bbbbbb;
+    border-radius: 30px;
+    padding: 3%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    margin-right: 25vw;
+    margin-left: 25vw;
+}
+
+.profile_stats {
+    margin-left: 30vw;
+    margin-right: 30vw;
+    margin-top: 10vh;
+    text-align: center;
+}
+
+.heading {
+    margin-left: 30vw;
+    margin-right: 30vw;
+    margin: 5vh;
+    text-align: center;
+}
+
+.marg {
+    margin: 10px;
+}
+
+.btn-rounded {
+    border-width: 1px;
+    border-color: rgb(70, 70, 70);
+    border-radius: 5px;
+    background-color: rgba(0, 128, 255, 0.798);
+    color: white;
+    font-size: 11pt;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 5px;
+    padding-left: 5px;
+    margin: 10px;
+}
+
+.btn-rounded:active {
+    background-color: rgba(23, 52, 200, 0.798);
+}
+
+.red-heart {
+    color: red;
+    background-color: white;
+    border-color: white;
+    border-style: none;
+    font-size: 14pt;
+
+}
+
+.timestamp {
+    font-size: 10pt;
+    color: grey;
+}
+
+.pagination {
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.edit {
+    border-width: 0px;
+    border-color: white;
+    border-radius: 0px;
+    background-color: white;
+    margin: 5px;
+}
+
+.right {
+    text-align: right;
+}
+
+.usernames {
+    text-decoration: none;
+    color: black;
+}
+
+.usernames:hover {
+    cursor: pointer;
+    color:rgba(23, 52, 200, 0.798);
+}
