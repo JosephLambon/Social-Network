@@ -27,19 +27,28 @@ Using Django for the backend and React for the frontend, I developed a functiona
 > SQLite is a C-language library that implements a fast & reliable SQL database engine.
 
 ## <a id='setup'> Setup and Usage </a>
+#### [NOTE: Anything in quotations ('...') is for the command line]
+
 ### 1. Install prerequisites
-* Install [Python](https://www.python.org/)
-* Install [virtualenv]
-  > Use 'pip install virtualenv'
+a. Install [Python](https://www.python.org/) </br>
+b. Install [virtualenv](https://virtualenv.pypa.io/en/latest/)
+  > 'pip install virtualenv' 
 ### 2. Setup virtual environment
+* Create virtual environment </br>
+   > 'virtualenv env_name' </br>
 * Start virtual environment
-...virtualenv venv/bin/activate
+   > 'source env_name/bin/activate' </br>
 * Install django
-> * pip install django
+   > 'pip install django'
 ### 3. Change directory
 * Change into the 'project4' folder.
 ### 4. Make migrations in Django
-> 1. python manage.py makemigrations
-> 2. python manage.py migrate
+> 'python manage.py makemigrations' </br>
+>'python manage.py migrate'
 ### 5. Run django server
-* python manage.py runserver
+> 'python manage.py runserver'
+
+## <a id='video'> Video Example </a>
+
+For this project, we were required to make a video displaying our web application's functionality. Feel free to watch this short exmaple of the final product. There are timestamps in the bio showing each of the implemented features.
+[![IMAGE ALT TEXT HERE](https://i9.ytimg.com/vi/NsjxrR-SHyg/mqdefault.jpg?sqp=CODJ-K8G-oaymwEmCMACELQB8quKqQMa8AEB-AH-CIAC0AWKAgwIABABGGsgayhrMA8=&rs=AOn4CLDSH_FJGtgX5TLtIK7kWgfN77oZQg)](https://youtu.be/NsjxrR-SHyg)
