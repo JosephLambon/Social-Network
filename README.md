@@ -78,4 +78,5 @@ python manage.py runserver
 ## <a id='video'> Video Example </a>
 
 For this project, we were required to make a video displaying our web application's functionality. Feel free to watch this short exmaple of the final product. There are timestamps in the bio showing each of the implemented features.
-[![IMAGE ALT TEXT HERE](https://i9.ytimg.com/vi/NsjxrR-SHyg/mqdefault.jpg?sqp=CODJ-K8G-oaymwEmCMACELQB8quKqQMa8AEB-AH-CIAC0AWKAgwIABABGGsgayhrMA8=&rs=AOn4CLDSH_FJGtgX5TLtIK7kWgfN77oZQg)](https://youtu.be/NsjxrR-SHyg)
+
+[![IMAGE ALT TEXT HERE][](LINK)
