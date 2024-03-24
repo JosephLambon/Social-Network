@@ -5,7 +5,7 @@
 1. [Project Synopsis](#project_synopsis)
 2. [Project Resources](#project_resources)
 3. [Setup and Usage](#setup)
-4. [Video Example](#video)
+4. [Video Demo](#video)
 
 
 ## <a id='project_synopsis'> Project Synopsis </a>
@@ -75,7 +75,7 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-## <a id='video'> Video Example </a>
+## <a id='video'> Video Demo </a>
 
 For this project, we were required to make a video displaying our web application's functionality. Feel free to watch this short exmaple of the final product. There are timestamps in the bio showing each of the implemented features.
 
