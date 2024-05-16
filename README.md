@@ -1,5 +1,5 @@
 # Social Networking Site
->### A CS50W project
+>### (CS50W) Project 4: A twitter-like Social Network, incorporating both Django and React.
 
 ## Contents
 1. [Project Synopsis](#project_synopsis)
